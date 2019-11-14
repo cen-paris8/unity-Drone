@@ -18,11 +18,11 @@ https://cen-paris8.github.io/unity-Drone/gh-pages/
 To Play :  
 
 Player One :  
-	* Right: Right
-	* Left: Left
-	* Go: Up
-	* Back: Down
-	* Shoot: Space
+* Right: Right
+* Left: Left
+* Go: Up
+* Back: Down
+* Shoot: Space
 	  
 	
 ***
