@@ -22,10 +22,13 @@ public class AttackState : BaseState
 
             if(_attackReadyTimer <= 0f)
             {
-                //Debug.Log("Attack!");
-                _drone.FireWeapon();
+            Debug.Log("Attack!");
+            _drone.FireWeapon();
+                
             }
             return null;
     }
-    
+
+  
+
 }

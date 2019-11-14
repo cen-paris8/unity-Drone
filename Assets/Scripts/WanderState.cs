@@ -15,6 +15,8 @@ public class WanderState : BaseState
     private Vector3 _direction;
     private Drone _drone;
 
+    private bool hasTarget = false;
+
     private Quaternion startingAngle = Quaternion.AngleAxis(-60, Vector3.up);
     private Quaternion stepAngle = Quaternion.AngleAxis(5, Vector3.up);
 
@@ -33,6 +35,7 @@ public class WanderState : BaseState
         {
             //Debug.Log("chaseTarget != null");
             _drone.SetTarget((Transform)chaseTarget);
+            hasTarget = false;
             return typeof(ChaseState);
         }
         
@@ -59,8 +62,9 @@ public class WanderState : BaseState
             transform.Translate(translation: Vector3.forward * Time.deltaTime * GameSettings.DroneSpeed);
 
         }
-        
+
         // Debug.DrawRay(start: transform.position, dir: _direction * _rayDistance, Color.red);
+        
         while (IsPathBlocked())
         {
             FindRandomDestination();
@@ -107,7 +111,7 @@ public class WanderState : BaseState
         var pos = transform.position;
 
 
-        Vector3 testPosition = testPosition = (transform.position + (transform.forward * 4f))
+        Vector3 testPosition = (transform.position + (transform.forward * 4f))
                 + new Vector3(x: UnityEngine.Random.Range(-4.5f, 4.5f), y: 0f, z: UnityEngine.Random.Range(-4.5f, 4.5f));
         //New
         if (Physics.SphereCast(pos, radius: 10f, direction, out hit, aggroRadius))
@@ -119,14 +123,20 @@ public class WanderState : BaseState
             if (drone != null && drone.Team != gameObject.GetComponent<Drone>().Team)
             {
                 testPosition = hit.transform.position;
+
+
+                transform.LookAt(drone.transform);
+                transform.Translate(Vector3.forward * Time.deltaTime * GameSettings.DroneSpeed);
+                hasTarget = true;
             }
+
         }
         //New
 
-            //testPosition = (transform.position + (transform.forward * 4f))
-            //   + new Vector3(x: UnityEngine.Random.Range(-4.5f, 4.5f), y: 0f, z: UnityEngine.Random.Range(-4.5f, 4.5f));
+        //testPosition = (transform.position + (transform.forward * 4f))
+        //   + new Vector3(x: UnityEngine.Random.Range(-4.5f, 4.5f), y: 0f, z: UnityEngine.Random.Range(-4.5f, 4.5f));
 
-            _destination = new Vector3(testPosition.x, y: 1f, testPosition.z);
+        _destination = new Vector3(testPosition.x, y: 1f, testPosition.z);
 
         _direction = Vector3.Normalize(_destination.Value - transform.position);
         _direction = new Vector3(_direction.x, y: 0f, _direction.z);
@@ -171,4 +181,5 @@ public class WanderState : BaseState
 
     }
 
+   
 }

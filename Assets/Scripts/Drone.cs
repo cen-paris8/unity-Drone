@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Drone : MonoBehaviour
 {
@@ -9,6 +10,7 @@ public class Drone : MonoBehaviour
     [SerializeField] private GameObject _laserVisual;
 
     public Transform Target {get; private set;}
+    public Slider _AimSlider;
 
     public Team Team => _team;
 
@@ -17,6 +19,11 @@ public class Drone : MonoBehaviour
     private void Awake()
     {
         InitializeStateMachine();
+    }
+
+    private void OnEnable()
+    {
+        _AimSlider.value = 0f;
     }
 
     private void InitializeStateMachine()
@@ -42,7 +49,7 @@ public class Drone : MonoBehaviour
 
         float distance = Vector3.Distance(a: Target.position, b: transform.position);
         _laserVisual.SetActive(value: true);
-
+        // _AimSlider.value = 10f;
         StartCoroutine(TurnOffLaser());
     }
 
@@ -50,6 +57,7 @@ public class Drone : MonoBehaviour
     {
         yield return new WaitForSeconds(0.25f);
         _laserVisual.SetActive(false);
+        // _AimSlider.value = 0f;
 
         if (Target != null)
         {
