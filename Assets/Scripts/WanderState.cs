@@ -10,7 +10,7 @@ public class WanderState : BaseState
     private float stopDistance = 1f;
     private float turnSpeed = 1f;
     private readonly LayerMask _layerMask = LayerMask.NameToLayer("Walls");
-    private float _rayDistance = 3.5f;
+    private float _rayDistance = 10f;
     private Quaternion _desiredRotation;
     private Vector3 _direction;
     private Drone _drone;
@@ -35,7 +35,7 @@ public class WanderState : BaseState
         {
             //Debug.Log("chaseTarget != null");
             _drone.SetTarget((Transform)chaseTarget);
-            hasTarget = false;
+//            hasTarget = false;
             return typeof(ChaseState);
         }
         
@@ -63,12 +63,12 @@ public class WanderState : BaseState
 
         }
 
-        // Debug.DrawRay(start: transform.position, dir: _direction * _rayDistance, Color.red);
+        Debug.DrawRay(start: transform.position, dir: _direction * _rayDistance, Color.red);
         
         while (IsPathBlocked())
         {
             FindRandomDestination();
-            //Debug.Log("WALL!");
+           Debug.Log("WALL!");
         }
 
         return null;
@@ -90,11 +90,11 @@ public class WanderState : BaseState
         Ray ray = new Ray(origin: transform.position, _direction);
         var hitSomething = Physics.RaycastAll(ray, _rayDistance); //RaycastAll
 
-        //if (hitSomething.Any()) //
-        //{
-        //    Debug.Log("hitSomething : " + hitSomething.ToString());
-            
-        //}
+        if (hitSomething.Any()) //
+        {
+            Debug.Log("hitSomething : " + hitSomething.ToString());
+
+        }
         return hitSomething.Any(); //.Any();
 
 
@@ -147,7 +147,7 @@ public class WanderState : BaseState
 
     private Transform CheckForAggro()
     {
-        float aggroRadius = 5f;
+        float aggroRadius = 10f;
 
         RaycastHit hit;
         var angle = transform.rotation * startingAngle;

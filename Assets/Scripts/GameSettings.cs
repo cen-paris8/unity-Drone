@@ -1,6 +1,9 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
+using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class GameSettings : MonoBehaviour
 {
@@ -8,6 +11,13 @@ public class GameSettings : MonoBehaviour
     [SerializeField] private float aggroRadius = 4f;
     [SerializeField] private float attackRange = 3f;
     [SerializeField] private GameObject droneProjectilePrefab;
+    [SerializeField] private GameObject drones;
+    [SerializeField] private GameObject panelBlue;
+    [SerializeField] private GameObject panelRed;
+
+    private bool flagEndGame = false;
+    private float gameTime;
+
 
     public static GameSettings Instance { get; private set; }
 
@@ -15,14 +25,72 @@ public class GameSettings : MonoBehaviour
     public static float AggroRadius => Instance.aggroRadius;
     public static float AttackRange => Instance.attackRange;
     public static GameObject DroneProjectilePrefab => Instance.droneProjectilePrefab;
+    public static GameObject Drones => Instance.drones;
+    public static GameObject PanelBlue => Instance.panelBlue;
+    public static GameObject PanelRed => Instance.panelRed;
 
-
+    private void Start()
+    {
+        gameTime = Time.time;
+    }
     private void Awake()
     {
         if (Instance != null)
             Destroy(gameObject);
         else
             Instance = this;
+    }
+
+    private void Update()
+    {
+        if (flagEndGame)
+        {
+            return;
+        }
+
+        Drone[] lastDrones = drones.GetComponentsInChildren<Drone>();
+
+        List<Drone> teamyBlue = lastDrones.Where(u => u.Team.Equals(Team.Blue)).ToList();
+        List <Drone> teamyRed = lastDrones.Where(u => u.Team.Equals(Team.Red)).ToList();
+
+        if (Time.time - gameTime > 60f)
+        {
+            int index = Random.Range(0, lastDrones.Length);
+
+            if (lastDrones[index].Team.Equals(Team.Blue))
+            {
+                teamyBlue = new List<Drone>();
+            }
+            else
+            {
+                teamyRed = new List<Drone>();
+            }
+        }
+
+        if (teamyBlue.Count == 0)
+        {
+            panelRed.SetActive(true);
+            panelRed.GetComponentInChildren<Button>().onClick.AddListener(Restart);
+            flagEndGame = true;
+            return;
+        }
+        if (teamyRed.Count == 0)
+        {
+            panelBlue.SetActive(true);
+            panelBlue.GetComponentInChildren<Button>().onClick.AddListener(Restart);
+            flagEndGame = true;
+            return;
+        }
+        
+    }
+
+    public void Restart()
+    {
+        if (flagEndGame)
+        {
+            SceneManager.LoadScene(0);
+        }
+        
     }
     // DrawLine with GL.LINES
     /*

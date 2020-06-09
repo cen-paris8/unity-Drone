@@ -9,6 +9,7 @@ public class Drone : MonoBehaviour
     [SerializeField] private Team _team;
     [SerializeField] private GameObject _laserVisual;
 
+
     public Transform Target {get; private set;}
     public Slider _AimSlider;
 
@@ -49,7 +50,9 @@ public class Drone : MonoBehaviour
 
         float distance = Vector3.Distance(a: Target.position, b: transform.position);
         _laserVisual.SetActive(value: true);
-        // _AimSlider.value = 10f;
+        //Debug.DrawRay(transform.position, Target.position, Color.red, 2.0f);
+
+        _AimSlider.value = 10f;
         StartCoroutine(TurnOffLaser());
     }
 
@@ -57,7 +60,7 @@ public class Drone : MonoBehaviour
     {
         yield return new WaitForSeconds(0.25f);
         _laserVisual.SetActive(false);
-        // _AimSlider.value = 0f;
+        _AimSlider.value = 0f;
 
         if (Target != null)
         {
