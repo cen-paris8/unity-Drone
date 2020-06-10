@@ -11,7 +11,7 @@ GameManager schema :
 
 ***
 Game :
-https://cen-paris8.github.io/unity-Drone/gh-pages/
+https://cen-paris8.github.io/unity-Drone-webGl/
 
 ![GitHub Logo](...)
 ***
@@ -27,7 +27,7 @@ Player One :
 	
 ***
 
-Notions abordées:
+Notions abordÃ©es:
 * RayCast, RayCastAll, SphereCast
 * State Machine => Drone
 * Abstract Class
